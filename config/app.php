@@ -139,11 +139,11 @@ return [
 		/*
 		 * Application Service Providers...
 		 */
-		'App\Providers\AppServiceProvider',
-		'App\Providers\BusServiceProvider',
-		'App\Providers\ConfigServiceProvider',
-		'App\Providers\EventServiceProvider',
-		'App\Providers\RouteServiceProvider',
+		'tinkoff\Providers\AppServiceProvider',
+		'tinkoff\Providers\BusServiceProvider',
+		'tinkoff\Providers\ConfigServiceProvider',
+		'tinkoff\Providers\EventServiceProvider',
+		'tinkoff\Providers\RouteServiceProvider',
 
         'GrahamCampbell\Parse\ParseServiceProvider',
         'Barryvdh\Debugbar\ServiceProvider'

@@ -1,6 +1,6 @@
-<?php namespace App\Http\Controllers;
+<?php namespace tinkoff\Http\Controllers;
 
-use App\Parser;
+use tinkoff\Parser;
 
 class ParserController extends Controller {
 //use Parser;

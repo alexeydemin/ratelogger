@@ -1,4 +1,4 @@
-<?php namespace App\Commands;
+<?php namespace tinkoff\Commands;
 
 abstract class Command {
 

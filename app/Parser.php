@@ -1,4 +1,4 @@
-<?php namespace App;
+<?php namespace tinkoff;
 
 use Goutte\Client;
 use Illuminate\Database\Eloquent\Model;
