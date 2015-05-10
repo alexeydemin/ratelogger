@@ -32,6 +32,8 @@ class WelcomeController extends Controller {
 	{
         $items = ['Pack luggage', 'Go to airport', 'Arrive in San Juan'];
         \Log::debug($items);
+
+        \Debugbar::error('Something is definitely going wrong.');
         return view('welcome');
 	}
 
