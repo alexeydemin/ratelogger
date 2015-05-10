@@ -7,7 +7,8 @@
 	"require": {
 		"laravel/framework": "5.0.*",
         "graham-campbell/parse": "~2.0",
-        "fabpot/goutte": "*"
+        "fabpot/goutte": "*",
+		"barryvdh/laravel-debugbar": "~2.0"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~4.0",

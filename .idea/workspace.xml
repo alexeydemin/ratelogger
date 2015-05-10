@@ -104,8 +104,8 @@
         <option value="$PROJECT_DIR$/app/Http/Controllers/Auth/ParserController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/ParserController.php" />
         <option value="$PROJECT_DIR$/app/Parser.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/WelcomeController.php" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/WelcomeController.php" />
       </list>
     </option>
   </component>
