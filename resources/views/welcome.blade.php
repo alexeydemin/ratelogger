@@ -41,6 +41,16 @@
 		<div class="container">
 			<div class="content">
 				<div class="title">Laravel 5</div>
+                {{-- Output the $name variable. --}}
+                <div style="color:black;font-weight:bold">{{ $name or 'Carolina'}} on {{$datii}}
+                  <table class="table borderless">
+                    @forelse ($lists as $list)
+                      @include('partials.row', array('link' => $list))
+                    @empty
+                    <tr><td>You don't have any lists saved.</td></tr>
+                    @endforelse
+                  </table>
+                </div>
 				<div class="quote">{{ Inspiring::quote() }}</div>
 			</div>
 		</div>

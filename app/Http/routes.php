@@ -15,6 +15,8 @@ Route::get('/', 'WelcomeController@index');
 
 Route::get('parser', 'ParserController@index');
 
+Route::get('about', 'AboutController@index');
+
 Route::get('home', 'HomeController@index');
 
 Route::controllers([

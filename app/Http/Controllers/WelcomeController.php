@@ -34,7 +34,15 @@ class WelcomeController extends Controller {
         \Log::debug($items);
 
         \Debugbar::error('Something is definitely going wrong.');
-        return view('welcome');
+        $name = 'Anraham';
+        $datii = date('Y-m-d');
+        $lists = array(
+                         array('name'=>'Vacation Planning', 'val'=>1),
+                         array('name'=>'Grocery Shopping', 'val'=>2),
+                         array('name'=>'Camping Trip', 'val'=>3),
+                      );
+        //$lists = array();
+        return view('welcome', compact('name', 'lists', 'datii') );
 	}
 
 }
