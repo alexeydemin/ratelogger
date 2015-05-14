@@ -1,0 +1,1 @@
+{"version":3,"sources":["test.coffee"],"names":[],"mappings":"AAAA;AAAA,EAAA,KAAA,CAAM,8BAAN,CAAA,CAAA;AAAA","file":"test.js","sourceRoot":"/source/","sourcesContent":["alert \"Hi I am annoying message!!!!\""]}

@@ -40,7 +40,8 @@
 	<body>
 		<div class="container">
 			<div class="content">
-				<div class="title">Laravel 5</div>
+				<h1>Welcome to Tinkoff</h1>>
+                <div class="title">Laravel 5</div>
                 {{-- Output the $name variable. --}}
                 <div style="color:black;font-weight:bold">{{ $name or 'Carolina'}} on {{$datii}}
                   <table class="table borderless">
