@@ -19,6 +19,8 @@ Route::get('about', 'AboutController@index');
 
 Route::get('home', 'HomeController@index');
 
+Route::get('chart', 'ParserController@chart');
+
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
