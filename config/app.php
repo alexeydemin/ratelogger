@@ -146,7 +146,8 @@ return [
 		'tinkoff\Providers\RouteServiceProvider',
 
         'GrahamCampbell\Parse\ParseServiceProvider',
-        'Barryvdh\Debugbar\ServiceProvider'
+        'Barryvdh\Debugbar\ServiceProvider',
+        //'Indatus\Dispatcher\ServiceProvider'
 
 	],
 
