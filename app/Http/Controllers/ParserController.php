@@ -3,6 +3,7 @@
 use tinkoff\Parser;
 use tinkoff\Exchange;
 use tinkoff\Update;
+use Request;
 
 class ParserController extends Controller {
 
@@ -60,6 +61,17 @@ class ParserController extends Controller {
     }
 
     public function chart(){
-        return Exchange::all();
+        $updates = Update::all();
+
+        $dates=[];
+        foreach( $updates->lists('created_at') as $up )
+            $dates[] = $up->format('d.m.Y H:i');;
+
+        return view('chart')->with('updates', $dates);
+    }
+
+    public function proceed(){
+        $input = Request::get('sell',0);
+        return ($input);
     }
 }
