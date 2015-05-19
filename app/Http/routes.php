@@ -19,7 +19,7 @@ Route::get('about', 'AboutController@index');
 
 Route::get('home', 'HomeController@index');
 
-Route::get('chart', 'ParserController@chart');
+Route::get('chart', 'ParserController@proceed');
 
 Route::post('chart', 'ParserController@proceed');
 

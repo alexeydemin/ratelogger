@@ -26,7 +26,7 @@
                     </tr>
                     <tr>
                       <td>Дебетовая карта</td>
-                      <td>{!! Form::checkbox('debit_card_transfer', 1, true) !!}</td>
+                      <td>{!! Form::checkbox('debit_card_transfer', 1, true, ['class' => 'form-control']) !!}</td>
                       <td>{!! Form::checkbox('debit_card_operations') !!}</td>
                     </tr>
                     <tr>
@@ -120,22 +120,11 @@
         var ctx = document.getElementById('report').getContext('2d');
         var chart = {
             labels: {!! json_encode($updates) !!},
-            datasets:[
-                {
-                data:[100,900,719, 40],
-                strokeColor: '#9ee06e',
-                pointColor: '#5faa29'
-                },
-                {
-                data:[50,200,800, 90],
-                strokeColor: '#d76e6e',
-                pointColor: '#aa2929'
-                }
+            datasets: {!! json_encode($data) !!}
 
-            ]
         };
 
-        new Chart(ctx).Line(chart, {bezierCurve:false, datasetFill : false});
+        new Chart(ctx).Line(chart, {bezierCurve:false, datasetFill : false, multiTooltipTemplate: "<%= datasetLabel %> - <%= value %>"});
     })();
 </script>
 @endsection
