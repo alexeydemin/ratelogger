@@ -13,21 +13,16 @@ class ParserController extends Controller {
         $this->middleware('guest');
     }
 
-/*    public function chart(){
-        $updates = Update::all();
-        dd($updates); die;
-
-        $dates=[];
-        foreach( $updates->lists('created_at') as $up )
-            $dates[] = $up->format('d.m.Y H:i');;
-
-        return view('chart')->with('updates', $dates);
-    }*/
-
     public function proceed(Request $request){
         $updates = Update::all();
 
-        //dd( $request->buy );
+        if( $_SERVER['REQUEST_METHOD'] == 'GET' ){
+            //Sell initial data if get request
+            $request->debit_card_transfer = 1;
+            $request->sell = 1;
+            $request->USDRUB =1;
+        }
+
         $dates=[];
         foreach( $updates->lists('created_at') as $up )
             $dates[] = $up->format('d.m.Y H:i');
@@ -45,33 +40,27 @@ class ParserController extends Controller {
 
         //categories
         $categories = array();
-        if( Request::get('credit_card_transfer') )
-            $categories[] = 'CreditCardsTransfers';
-
-        if( Request::get('credit_card_operations'))
-            $categories[] = 'CreditCardsOperations';
-
-        if( Request::get('debit_card_transfer'))
-            $categories[] = 'DebitCardsTransfers';
-
-        if( Request::get('debit_card_operations'))
-            $categories[] = 'DebitCardsOperations';
+        if( $request->credit_card_transfer )    $categories[] = 'CreditCardsTransfers';
+        if( $request->credit_card_operations)   $categories[] = 'CreditCardsOperations';
+        if( $request->debit_card_transfer)      $categories[] = 'DebitCardsTransfers';
+        if( $request->debit_card_operations)    $categories[] = 'DebitCardsOperations';
+        if( $request->deposit_payments )        $categories[] = 'DepositPayments';
+        if( $request->deposit_closing_benefit ) $categories[] = 'DepositClosingBenefit';
+        if( $request->deposit_closing )         $categories[] = 'DepositClosing';
+        if( $request->prepaid_card_transfer )   $categories[] = 'PrepaidCardTransfer';
+        if( $request->prepaid_card_operations ) $categories[] = 'PrepaidCardOperations';
 
         //operations
         $operations = array();
-        if( Request::get('buy') )
-            $operations[] = 'buy';
-
-        if( Request::get('sell') )
-            $operations[] = 'sell';
+        if( $request->buy )  $operations[] = 'buy';
+        if( $request->sell ) $operations[] = 'sell';
 
         //currencies
         $from = array();
         $to = array();
-        if( Request::get('RUBUSD') ){
+        if( $request->USDRUB ){
             $from[] = 'USD'; $to[] = 'RUB';
         }
-
 
         $exchanges = DB::table('exchanges')
                        ->whereIn('category', $categories )
@@ -114,7 +103,6 @@ class ParserController extends Controller {
 
                   ];
 
-
         $data = array();
         foreach( $rates as $label => $r  ){
             $color = array_pop($colors);
@@ -123,7 +111,7 @@ class ParserController extends Controller {
                            , 'strokeColor' => '#' . $color['stroke']
                            , 'pointColor' => '#' . $color['point'] );
         }
-        //dd($data);
-        return view('chart')->with('updates', $dates)->with('data', $data);
+
+        return view('chart')->with('updates', $dates)->with('data', $data)->with('request', $request);
     }
 }
