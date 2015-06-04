@@ -2,14 +2,25 @@
 
 use tinkoff\Http\Requests;
 use tinkoff\Http\Controllers\Controller;
+use tinkoff\Exchange;
 
 use Illuminate\Http\Request;
 
 class AboutController extends Controller {
 
-    function index()
+    function create()
     {
-        return view('about.index');
+        $article = Exchange::all()->first();
+        //dd( $article->category );
+        return view('about.index')->with('articles', $article);
     }
+
+    function keep(Request $request)
+    {
+        $this->validate($request, ['dummy' => 'required']  );
+
+        return 'list';
+    }
+
 
 }

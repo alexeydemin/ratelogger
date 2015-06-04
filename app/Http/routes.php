@@ -11,17 +11,33 @@
 |
 */
 
+interface BarInterface{}
+
+class Bar implements BarInterface{}
+
+App::bind('BarInterface', function()
+{
+    return new Bar;
+});
+
+Route::get('bar', function(BarInterface $bar){
+
+    dd($bar);
+});
+
 Route::get('/', 'WelcomeController@index');
 
 Route::get('parser', 'ParserController@index');
 
-Route::get('about', 'AboutController@index');
+Route::get('about', 'AboutController@create');
+
+Route::post('about', 'AboutController@keep');
 
 Route::get('home', 'HomeController@index');
 
-Route::get('chart', 'ParserController@proceed');
+Route::get('chart', 'ParserController@proceed_get');
 
-Route::post('chart', 'ParserController@proceed');
+Route::post('chart', 'ParserController@proceed_post');
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',

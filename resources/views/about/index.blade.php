@@ -10,8 +10,21 @@
 
 <a href="http://www.wjgilmore.com"
    class="btn btn-success">W.J. Gilmore, LLC</a>
+<br>
+<br>
+<br>
+<div>
+    {!! Form::open() !!}
+    {!! Form::text('category', null, ['class'=>'']) !!}
+    {!! Form::checkbox('my') !!}
+    {!! Form::submit('Применить', ['class' => 'btn btn-primary'] ) !!}
+    {!! var_dump($errors->messages) !!}
+    {!! Form::close() !!}
+</div>
+
 
 @endsection
+
 
 
 @section('advertisement')
@@ -20,3 +33,4 @@
     Jamz and Sun Lotion Special $59!
 </p>
 @endsection
+

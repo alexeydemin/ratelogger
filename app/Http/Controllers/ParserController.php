@@ -13,8 +13,19 @@ class ParserController extends Controller {
         $this->middleware('guest');
     }
 
-    public function proceed(Request $request){
-        $updates = Update::all();
+
+
+    public function proceed_post(Request $request){
+
+        $this->validate($request, ['dummy' => 'required']  );
+    }
+
+
+    public function proceed_get(Request $request){
+
+        //$this->validate($request, ['dummy' => 'required']  );
+
+        $updates = Update::all();//->take(15);
 
         if( $_SERVER['REQUEST_METHOD'] == 'GET' ){
             //Sell initial data if get request

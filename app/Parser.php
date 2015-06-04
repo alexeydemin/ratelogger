@@ -5,9 +5,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Parser extends Model{
 
-    public function get_text() {
+    public function get_text($url) {
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://www.tinkoff.ru/api/v1/currency_rates/");
+        curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         $result = curl_exec($ch);
@@ -18,7 +18,7 @@ class Parser extends Model{
 
     public function parse()
     {
-        $data = $this->get_text();
+        $data = $this->get_text('https://www.tinkoff.ru/api/v1/currency_rates/');
         $obj  =json_decode($data);
         $rates = $obj->payload->rates;
 

@@ -102,11 +102,12 @@
       </div>
     </div>
 
-    
 
 
-    <div class="col-md-9" style="background-color: aliceblue">
-        <canvas id="report" width="600" height="500"></canvas>
+    <div class="col-md-1"></div>
+    <div class="col-md-8" style="background-color: aliceblue">
+        <!-- Водка-водка-водка и пивко -->
+        <canvas id="report" width="700" height="500"></canvas>
     </div>
   </div>
 </div>
