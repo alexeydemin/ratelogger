@@ -1,35 +1,30 @@
 <?php namespace tinkoff;
 
 //use Goutte\Client;
+use Curl\Curl;
 use Illuminate\Database\Eloquent\Model;
 
 class Parser extends Model{
 
-    public function get_text($url) {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        $result = curl_exec($ch);
-        curl_close($ch);
+    public $curl;
 
-        return  $result;
+    public function __construct(Curl $curl)
+    {
+        $this->curl = $curl;
     }
 
     public function parse()
     {
-        $data = $this->get_text('https://www.tinkoff.ru/api/v1/currency_rates/');
-        $obj  =json_decode($data);
+        $obj = $this->curl->get('https://www.tinkoff.ru/api/v1/currency_rates/');
         $rates = $obj->payload->rates;
-
         $hash = md5(serialize($rates));
         $last_update = Update::all()->last();
         if ( $last_update && $hash == $last_update->hash ){
             //nothing changed
-            return 'Nothing to update';
+            return "Nothing to update\n";
         }
         $update = Update::create(['hash' => $hash]);
-        //var_dump($rates);
+
         foreach( $rates as $rate ){
             $row = new Exchange();
             $row->category  = $rate->category;
@@ -49,17 +44,7 @@ class Parser extends Model{
                 $row->update_id = $update->id;
                 $row->save();
             }
-
-    /*        echo $rate->category . '-'
-                . $rate->fromCurrency->name . '-'
-                . $rate->toCurrency->name . '-'
-                . $rate->buy . '-'
-                . ( isset( $rate->sell ) ? $rate->sell : '' )
-                . '<br>'
-            ;*/
-
         }
-        //return view('welcomezz');
     }
 
 }

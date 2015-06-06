@@ -8,23 +8,58 @@ use DB;
 
 class ParserController extends Controller {
 
+    public $colors;
+    public $labels;
+
     public function __construct()
     {
         $this->middleware('guest');
+        $colors = [
+            [ 'color'  => 'green'
+                , 'stroke' => '9ee06e'
+                , 'point'  => '5faa29' ],
+            [ 'color'  => 'red'
+                , 'stroke' => 'd76e6e'
+                , 'point'  => 'aa2929' ],
+            [ 'color'  => 'blue'
+                , 'stroke' => '8a7aff'
+                , 'point'  => '1e00ff' ],
+            [ 'color'  => 'violet'
+                , 'stroke' => 'e293ff'
+                , 'point'  => 'ba00ff' ],
+            [ 'color'  => 'orange'
+                , 'stroke' => 'ffb763'
+                , 'point'  => 'ff8a00' ],
+            [ 'color'  => 'black'
+                , 'stroke' => '9d9d9d'
+                , 'point'  => '000000' ],
+            [ 'color'  => 'brown'
+                , 'stroke' => 'ca975a'
+                , 'point'  => '4d2a00' ],
+        ];
+
+        $this->colors = $colors;
+
+        $label['cat']['CreditCardsOperations']  = 'кредитные карты, операции';
+        $label['cat']['CreditCardsTransfers']   = 'кредитные карты, пополнение';
+        $label['cat']['DebitCardsOperations']   = 'дебетовые карты, операции';
+        $label['cat']['DebitCardsTransfers']    = 'дебетовые карты, пополнение';
+        $label['cat']['DepositClosing']         = 'досточное изъятие вклада';
+        $label['cat']['DepositClosingBenefit']  = 'закрытие вклада';
+        $label['cat']['DepositPayments']        = 'пополнение вклада';
+        $label['cat']['PrepaidCardsOperations'] = 'ЭДС, операции';
+        $label['cat']['PrepaidCardsTransfers']  = 'ЭДС, переводы';
+        $label['cat']['SavingAccountTransfers'] = 'накопительные счета';
+        $label['ope']['buy'] = 'Покупка';
+        $label['ope']['sell'] = 'Продажа';
+
+        $this->labels = $label;
     }
 
+    public function proceed(Request $request)
+    {
 
-
-    public function proceed_post(Request $request){
-
-        $this->validate($request, ['dummy' => 'required']  );
-    }
-
-
-    public function proceed_get(Request $request){
-
-        //$this->validate($request, ['dummy' => 'required']  );
-
+        //dd( $request );
         $updates = Update::all();//->take(15);
 
         if( $_SERVER['REQUEST_METHOD'] == 'GET' ){
@@ -38,17 +73,6 @@ class ParserController extends Controller {
         foreach( $updates->lists('created_at') as $up )
             $dates[] = $up->format('d.m.Y H:i');
 
-     /* | DepositClosingBenefit  |
-        | DepositClosing         |
-        | DepositPayments        |
-        | DebitCardsTransfers    |
-        | DebitCardsOperations   |
-        | CreditCardsOperations  |
-        | CreditCardsTransfers   |
-        | PrepaidCardsTransfers  |
-        | PrepaidCardsOperations |
-        | SavingAccountTransfers | */
-
         //categories
         $categories = array();
         if( $request->credit_card_transfer )    $categories[] = 'CreditCardsTransfers';
@@ -58,8 +82,8 @@ class ParserController extends Controller {
         if( $request->deposit_payments )        $categories[] = 'DepositPayments';
         if( $request->deposit_closing_benefit ) $categories[] = 'DepositClosingBenefit';
         if( $request->deposit_closing )         $categories[] = 'DepositClosing';
-        if( $request->prepaid_card_transfer )   $categories[] = 'PrepaidCardTransfer';
-        if( $request->prepaid_card_operations ) $categories[] = 'PrepaidCardOperations';
+        if( $request->prepaid_card_transfer )   $categories[] = 'PrepaidCardsTransfers';
+        if( $request->prepaid_card_operations ) $categories[] = 'PrepaidCardsOperations';
 
         //operations
         $operations = array();
@@ -89,40 +113,36 @@ class ParserController extends Controller {
                   ][] = $rate->value;
         }
 
-        $colors = [
-                    [ 'color'  => 'green'
-                    , 'stroke' => '9ee06e'
-                    , 'point'  => '5faa29' ],
-                    [ 'color'  => 'red'
-                    , 'stroke' => 'd76e6e'
-                    , 'point'  => 'aa2929' ],
-                    [ 'color'  => 'blue'
-                    , 'stroke' => '8a7aff'
-                    , 'point'  => '1e00ff' ],
-                    [ 'color'  => 'violet'
-                    , 'stroke' => 'e293ff'
-                    , 'point'  => 'ba00ff' ],
-                    [ 'color'  => 'orange'
-                    , 'stroke' => 'ffb763'
-                    , 'point'  => 'ff8a00' ],
-                    [ 'color'  => 'black'
-                    , 'stroke' => '9d9d9d'
-                    , 'point'  => '000000' ],
-                    [ 'color'  => 'brown'
-                    , 'stroke' => 'ca975a'
-                    , 'point'  => '4d2a00' ],
-
-                  ];
 
         $data = array();
         foreach( $rates as $label => $r  ){
-            $color = array_pop($colors);
-            $data[] = array( 'label' => $label
+            $color = array_pop($this->colors);
+            $data[] = array( 'label' => $this->prepare_label($label)
                            , 'data'=> $r
                            , 'strokeColor' => '#' . $color['stroke']
                            , 'pointColor' => '#' . $color['point'] );
         }
 
-        return view('chart')->with('updates', $dates)->with('data', $data)->with('request', $request);
+        $saved = '';
+        foreach ($dates as &$date) {
+            $tmp = $date;
+            if( strncmp($date, $saved, 10) === 0 )
+                $date = substr($date, 11);
+            $saved = $tmp;
+        }
+
+        return view('chart')->with('updates', $dates)
+                            ->with('data', $data)
+                            ->with('request', $request)
+                            ->with('width', 23*count($dates));
+    }
+
+    protected function prepare_label( $label )
+    {
+        list($category, $operation, $from, $to) = explode('_', $label);
+        $operation = $this->labels['ope'][$operation];
+        $category = $this->labels['cat'][$category];
+        return "$operation $from за $to ($category)";
+
     }
 }

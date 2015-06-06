@@ -35,9 +35,9 @@ Route::post('about', 'AboutController@keep');
 
 Route::get('home', 'HomeController@index');
 
-Route::get('chart', 'ParserController@proceed_get');
+Route::get('chart', 'ParserController@proceed');
 
-Route::post('chart', 'ParserController@proceed_post');
+Route::post('chart', 'ParserController@proceed');
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',

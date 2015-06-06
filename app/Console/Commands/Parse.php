@@ -24,9 +24,8 @@ class Parse extends Command {
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(Parser $parser)
     {
-        $parser = new Parser();
         $parser->parse();
     }
 

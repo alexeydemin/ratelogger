@@ -39,7 +39,7 @@ return [
 	|
 	*/
 
-	'timezone' => 'America/Santiago',
+	'timezone' => 'Europe/Moscow',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -148,6 +148,8 @@ return [
 
         'GrahamCampbell\Parse\ParseServiceProvider',
         'Barryvdh\Debugbar\ServiceProvider',
+        //'Curl\Debugbar\ServiceProvider',
+
 
 	],
 
