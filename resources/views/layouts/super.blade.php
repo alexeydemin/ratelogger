@@ -3,13 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Welcome to TinkoffParser</title>
-    <link rel="stylesheet"
-          href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-    <script
-        src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-    <script
-        src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js">
-    </script>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 </head>
 <body>
 

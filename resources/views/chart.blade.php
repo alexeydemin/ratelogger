@@ -98,17 +98,21 @@
     </div>
 
     <div class="col-md-1"></div>
-    <div class="row-fluid col-md-8 nav" style="background-color: aliceblue">
+    <div class="col-md-8 nav" style="background-color: aliceblue">
         <canvas id="report" width="{{$width}}" height="500"></canvas>
     </div>
-    <div>
-        <table>
-            @foreach($data as $da)
-            <tr><td><div class="circle" style="background: {{$da['pointColor']}}"></div></td><td>{{ $da['label'] }}</td></tr>
-            @endforeach
-        </table>
-    </div>
   </div>
+   <div class="row">
+     <div class="col-md-3"></div>
+     <div class="col-md-1"></div>
+     <div class="col-md-8">
+       <table class="tab">
+         @foreach($data as $da)
+         <tr><td class="tab"><div class="circle" style="background: {{$da['pointColor']}}"></div></td><td>{{ $da['label'] }}</td></tr>
+         @endforeach
+       </table>
+     </div>
+   </div>
 </div>
 @endsection
 
@@ -138,9 +142,12 @@
     }
     .circle {
         border-radius: 50%/50%;
-        width: 25px;
-        height: 25px;
+        width: 20px;
+        height: 20px;
         background: black;
+    }
+    .tab {
+            padding: 3px;
     }
 </style>
 @endsection

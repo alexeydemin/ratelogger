@@ -3,13 +3,16 @@
 use tinkoff\Parser;
 use tinkoff\Exchange;
 use tinkoff\Update;
-use Illuminate\Http\Request;
+//use Illuminate\Http\Request;
+use Request;
+use Illuminate\Support\Input;
 use DB;
 
 class ParserController extends Controller {
 
     public $colors;
     public $labels;
+    public $currencies;
 
     public function __construct()
     {
@@ -44,7 +47,7 @@ class ParserController extends Controller {
         $label['cat']['CreditCardsTransfers']   = 'кредитные карты, пополнение';
         $label['cat']['DebitCardsOperations']   = 'дебетовые карты, операции';
         $label['cat']['DebitCardsTransfers']    = 'дебетовые карты, пополнение';
-        $label['cat']['DepositClosing']         = 'досточное изъятие вклада';
+        $label['cat']['DepositClosing']         = 'досрочное изъятие вклада';
         $label['cat']['DepositClosingBenefit']  = 'закрытие вклада';
         $label['cat']['DepositPayments']        = 'пополнение вклада';
         $label['cat']['PrepaidCardsOperations'] = 'ЭДС, операции';
@@ -54,19 +57,40 @@ class ParserController extends Controller {
         $label['ope']['sell'] = 'Продажа';
 
         $this->labels = $label;
+
+        $currencies = ['RUB', 'USD', 'EUR', 'GBP'];
+        $this->currencies = $currencies;
     }
 
     public function proceed(Request $request)
     {
 
-        //dd( $request );
-        $updates = Update::all();//->take(15);
+        $input = Request::all();
 
+        //var_dump( $request->cur );
+        if(!isset($input['cur']) ){
+            $name = Request::input('name', 'Sally');;
+        }
+
+        //dd( Input::has('debit_card_transfer') );
+
+        foreach($this->currencies as $cur1){
+            foreach($this->currencies as $cur2){
+
+            }
+        }
+
+        //dd( $request->cur );
+        $updates = Update::all();//->take(15);
         if( $_SERVER['REQUEST_METHOD'] == 'GET' ){
             //Sell initial data if get request
             $request->debit_card_transfer = 1;
             $request->sell = 1;
-            $request->USDRUB =1;
+
+            //dd($request);
+            //dd($request->sell);
+            $request->cur = [];
+            $request->cur['USDRUB'] = 1;
         }
 
         $dates=[];
@@ -74,7 +98,7 @@ class ParserController extends Controller {
             $dates[] = $up->format('d.m.Y H:i');
 
         //categories
-        $categories = array();
+        $categories = [];
         if( $request->credit_card_transfer )    $categories[] = 'CreditCardsTransfers';
         if( $request->credit_card_operations)   $categories[] = 'CreditCardsOperations';
         if( $request->debit_card_transfer)      $categories[] = 'DebitCardsTransfers';
@@ -86,23 +110,39 @@ class ParserController extends Controller {
         if( $request->prepaid_card_operations ) $categories[] = 'PrepaidCardsOperations';
 
         //operations
-        $operations = array();
+        $operations = [];
         if( $request->buy )  $operations[] = 'buy';
         if( $request->sell ) $operations[] = 'sell';
 
         //currencies
-        $from = array();
-        $to = array();
-        if( $request->USDRUB ){
-            $from[] = 'USD'; $to[] = 'RUB';
+        $from = [];
+        $to = [];
+        if( isset( $request->cur ) ){
+            foreach( $request->cur as $key => $value )
+                if( in_array( substr($key,0,3), $this->currencies) &&  in_array(substr($key,3,3), $this->currencies ) ){
+                    $from[] = substr($key,0,3); $to[] = substr($key,3,3);
+                }
         }
 
-        $exchanges = DB::table('exchanges')
+
+/*        $exchanges = DB::table('exchanges')
                        ->whereIn('category', $categories )
                        ->whereIn('operation', $operations )
                        ->whereIn('from', $from )
                        ->whereIn('to', $to )
-                       ->get();
+                       ->get();*/
+
+          $exchanges = DB::table('exchanges')
+                               ->whereIn('category', $categories )
+                               ->whereIn('operation', $operations )
+                               ->where(function($q) use($from, $to){
+                                   // dd($from, $to);
+                                    foreach( $from as $key => $fr )
+                                        $q->where('from', '=', $from[$key])
+                                          ->where('to', '=', $to[$key]);
+                                })
+                               ->get();
+
 
         $rates = array();
         foreach($exchanges as $rate){
@@ -131,7 +171,7 @@ class ParserController extends Controller {
             $saved = $tmp;
         }
 
-        return view('chart')->with('updates', $dates)
+        return view('purechart')->with('updates', $dates)
                             ->with('data', $data)
                             ->with('request', $request)
                             ->with('width', 23*count($dates));
