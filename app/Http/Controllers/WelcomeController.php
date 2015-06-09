@@ -1,5 +1,7 @@
 <?php namespace tinkoff\Http\Controllers;
 
+use Request;
+
 class WelcomeController extends Controller {
 
 	/*
@@ -30,6 +32,10 @@ class WelcomeController extends Controller {
 	 */
 	public function index()
 	{
+        $form = new \tinkoff\Form();
+
+        $input = Request::all();
+        print_r($input);
         $items = ['Pack luggage', 'Go to airport', 'Arrive in San Juan'];
         \Log::debug($items);
 
@@ -42,7 +48,15 @@ class WelcomeController extends Controller {
                          array('name'=>'Camping Trip', 'val'=>3),
                       );
         //$lists = array();
-        return view('welcome', compact('name', 'lists', 'datii') );
+        return view('welcome', compact('name', 'lists', 'datii', 'form') );
 	}
+
+    public function post()
+    {
+
+
+
+
+    }
 
 }

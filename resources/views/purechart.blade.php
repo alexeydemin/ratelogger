@@ -14,24 +14,24 @@
       </div><!-- /first-settings-row -->
       <div class="pure-g stnr"><!-- second-settings-row credit card #ffdd2e -->
         <div class="pure-u-3-5">Кредитная карта</div>
-        <div class="pure-u-1-5">{!! Form::checkbox('credit_card_transfer', $request->credit_card_transfer, $request->credit_card_transfer, ['class' => '', 'title' => 'Кредитная карта, пополнение']) !!}</div>
-        <div class="pure-u-1-5">{!! Form::checkbox('credit_card_operations', $request->credit_card_operations, $request->credit_card_operations, ['class' => '', 'title' => 'Кредитная карта, операции']) !!}</div>
+        <div class="pure-u-1-5">{!! Form::checkbox('cat[CreditCardsTransfers]', 1, $input['cat']['CreditCardsTransfers'], ['class' => '', 'title' => 'Кредитная карта, пополнение']) !!}</div>
+        <div class="pure-u-1-5">{!! Form::checkbox('cat[CreditCardsOperations]', 1, $input['cat']['CreditCardsOperations'], ['class' => '', 'title' => 'Кредитная карта, операции']) !!}</div>
       </div>
       <div class="pure-g stnr"><!-- third-settings-row debit card #ffdd2e -->
         <div class="pure-u-3-5">Дебетовая карта</div>
-        <div class="pure-u-1-5">{!! Form::checkbox('debit_card_transfer', $request->debit_card_transfer, $request->debit_card_transfer, ['class' => '', 'title' => 'Дебетовая карта, пополнение']) !!}</div>
-        <div class="pure-u-1-5">{!! Form::checkbox('debit_card_operations', $request->debit_card_operations, $request->debit_card_operations, ['class' => '', 'title' => 'Дебетовая карта, операции']) !!}</div>
+        <div class="pure-u-1-5">{!! Form::checkbox('cat[DebitCardsTransfers]', 1, $input['cat']['DebitCardsTransfers'], ['class' => '', 'title' => 'Дебетовая карта, пополнение']) !!}</div>
+        <div class="pure-u-1-5">{!! Form::checkbox('cat[DebitCardsOperations]', 1, $input['cat']['DebitCardsOperations'], ['class' => '', 'title' => 'Дебетовая карта, операции']) !!}</div>
       </div>
       <div class="pure-g stnr"><!-- fourth-settings-row deposit #ffdd2e -->
         <div class="pure-u-3-5">Вклад</div>
-        <div class="pure-u-1-5">{!! Form::checkbox('deposit_payments', $request->deposit_payments, $request->deposit_payments, ['class' => '', 'title' => 'Вклад, пополнение']) !!}</div>
-        <div class="pure-u-1-5">{!! Form::checkbox('deposit_closing_benefit', $request->deposit_closing_benefit, $request->deposit_closing_benefit, ['class' => '', 'title' => 'Вклад, закрытие']) !!}
-                                {!! Form::checkbox('deposit_closing', $request->deposit_closing, $request->deposit_closing, ['class' => '', 'title' => 'Вклад, досрочное изъятие']) !!}</div>
+        <div class="pure-u-1-5">{!! Form::checkbox('cat[DepositPayments]', 1, $input['cat']['DepositPayments'], ['class' => '', 'title' => 'Вклад, пополнение']) !!}</div>
+        <div class="pure-u-1-5">{!! Form::checkbox('cat[DepositClosingBenefit]', 1, $input['cat']['DepositClosingBenefit'], ['class' => '', 'title' => 'Вклад, закрытие']) !!}
+                                {!! Form::checkbox('cat[DepositClosing]', 1, $input['cat']['DepositClosing'], ['class' => '', 'title' => 'Вклад, досрочное изъятие']) !!}</div>
       </div>
       <div class="pure-g stnr"><!-- fourth-settings-row deposit #ffdd2e -->
         <div class="pure-u-3-5">Электронные ДС</div>
-        <div class="pure-u-1-5">{!! Form::checkbox('prepaid_card_transfer', $request->prepaid_card_transfer, $request->prepaid_card_transfer, ['class' => '', 'title' => 'Электронные ДС, пополнение']) !!}</div>
-        <div class="pure-u-1-5">{!! Form::checkbox('prepaid_card_operations', $request->prepaid_card_operations, $request->prepaid_card_operations, ['class' => '', 'title' => 'Электронные ДС, операции']) !!}</div>
+        <div class="pure-u-1-5">{!! Form::checkbox('cat[PrepaidCardsTransfers]', 1, $input['cat']['PrepaidCardsTransfers'], ['class' => '', 'title' => 'Электронные ДС, пополнение']) !!}</div>
+        <div class="pure-u-1-5">{!! Form::checkbox('cat[PrepaidCardsOperations]', 1, $input['cat']['PrepaidCardsOperations'], ['class' => '', 'title' => 'Электронные ДС, операции']) !!}</div>
       </div>
     </div>
     <!-- /CATEGORIES-->
@@ -42,8 +42,8 @@
         <div class="pure-u-1-2">Продажа</div>
       </div>
       <div class="pure-g stnr"><!-- sixth-settings-row titles #ffe86a -->
-        <div class="pure-u-1-2">{!! Form::checkbox('buy', $request->buy, $request->buy, ['title' => 'Покупка банком']) !!}</div>
-        <div class="pure-u-1-2">{!! Form::checkbox('sell', $request->sell, $request->sell, ['title' => 'Продажа банком']) !!}</div>
+        <div class="pure-u-1-2">{!! Form::checkbox('opr[buy]', 1, $input['opr']['buy'], ['title' => 'Покупка банком']) !!}</div>
+        <div class="pure-u-1-2">{!! Form::checkbox('opr[sell]', 1, $input['opr']['sell'], ['title' => 'Продажа банком']) !!}</div>
       </div>
     </div>
     <!-- /OPERATIONS -->
@@ -65,23 +65,23 @@
        </div>
       <div class="pure-g stnr">
         <div class="pure-u-1-5">$</div>
-        <div class="pure-u-1-5">{!! Form::checkbox('cur[USDRUB]', 1, $request->cur['USDRUB'], ['title' => 'USD/RUB']) !!}</div>
+        <div class="pure-u-1-5">{!! Form::checkbox('cur[USDRUB]', 1, $input['cur']['USDRUB'], ['title' => 'USD/RUB']) !!}</div>
         <div class="pure-u-1-5">&Oslash;</div>
-        <div class="pure-u-1-5">{!! Form::checkbox('cur[USDEUR]', 1, $request->cur['USDEUR'], ['title' => 'USD/EUR']) !!}</div>
-        <div class="pure-u-1-5">{!! Form::checkbox('cur[USDGBP]', 1, $request->cur['USDGBP'], ['title' => 'USD/GBP']) !!}</div>
+        <div class="pure-u-1-5">{!! Form::checkbox('cur[USDEUR]', 1, $input['cur']['USDEUR'], ['title' => 'USD/EUR']) !!}</div>
+        <div class="pure-u-1-5">{!! Form::checkbox('cur[USDGBP]', 1, $input['cur']['USDGBP'], ['title' => 'USD/GBP']) !!}</div>
       </div>
       <div class="pure-g stnr">
         <div class="pure-u-1-5">&euro;</div>
-        <div class="pure-u-1-5">{!! Form::checkbox('cur[EURRUB]', 1, $request->cur['EURRUB'], ['title' => 'EUR/RUB']) !!}</div>
-        <div class="pure-u-1-5">{!! Form::checkbox('cur[EURUSD]', 1, $request->cur['EURUSD'], ['title' => 'EUR/USD']) !!}</div>
+        <div class="pure-u-1-5">{!! Form::checkbox('cur[EURRUB]', 1, $input['cur']['EURRUB'], ['title' => 'EUR/RUB']) !!}</div>
+        <div class="pure-u-1-5">{!! Form::checkbox('cur[EURUSD]', 1, $input['cur']['EURUSD'], ['title' => 'EUR/USD']) !!}</div>
         <div class="pure-u-1-5">&Oslash;</div>
-        <div class="pure-u-1-5">{!! Form::checkbox('cur[EURGBP]', 1, $request->cur['EURGBP'], ['title' => 'EUR/GBP']) !!}</div>
+        <div class="pure-u-1-5">{!! Form::checkbox('cur[EURGBP]', 1, $input['cur']['EURGBP'], ['title' => 'EUR/GBP']) !!}</div>
       </div>
       <div class="pure-g stnr">
         <div class="pure-u-1-5">&pound;</div>
-        <div class="pure-u-1-5">{!! Form::checkbox('cur[GBPRUB]', 1, $request->cur['GBPRUB'], ['title' => 'GBP/RUB']) !!}</div>
-        <div class="pure-u-1-5">{!! Form::checkbox('cur[GBPUSD]', 1, $request->cur['GBPUSD'], ['title' => 'GBP/USD']) !!}</div>
-        <div class="pure-u-1-5">{!! Form::checkbox('cur[GBPEUR]', 1, $request->cur['GBPEUR'], ['title' => 'GBP/EUR']) !!}</div>
+        <div class="pure-u-1-5">{!! Form::checkbox('cur[GBPRUB]', 1, $input['cur']['GBPRUB'], ['title' => 'GBP/RUB']) !!}</div>
+        <div class="pure-u-1-5">{!! Form::checkbox('cur[GBPUSD]', 1, $input['cur']['GBPUSD'], ['title' => 'GBP/USD']) !!}</div>
+        <div class="pure-u-1-5">{!! Form::checkbox('cur[GBPEUR]', 1, $input['cur']['GBPEUR'], ['title' => 'GBP/EUR']) !!}</div>
         <div class="pure-u-1-5">&Oslash;</div>
       </div>
     </div>

@@ -38,6 +38,14 @@
 		</style>
 	</head>
 	<body>
+        <p>FORM *******************************</p>
+        {!! Form::model($form) !!}
+        {!! Form::text('one',   null) !!}
+        {!! Form::text('two',   null) !!}
+        {!! Form::text('three', null) !!}
+        {!! Form::submit('Apply') !!}
+        {!! Form::close() !!}
+        <p>/FORM *******************************</p>
 		<div class="container">
 			<div class="content">
 				<h1>Welcome to Tinkoff</h1>>

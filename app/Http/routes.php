@@ -11,7 +11,7 @@
 |
 */
 
-interface BarInterface{}
+/*interface BarInterface{}
 
 class Bar implements BarInterface{}
 
@@ -27,19 +27,20 @@ Route::get('bar', function(BarInterface $bar){
 
 Route::get('/', 'WelcomeController@index');
 
+Route::post('/', 'WelcomeController@index');
+
 Route::get('parser', 'ParserController@index');
 
 Route::get('about', 'AboutController@create');
 
 Route::post('about', 'AboutController@keep');
 
-Route::get('home', 'HomeController@index');
+Route::get('home', 'HomeController@index');*/
 
-Route::get('chart', 'ParserController@proceed');
+Route::get('/', 'ParserController@proceed');
+Route::post('/', 'ParserController@proceed');
 
-Route::post('chart', 'ParserController@proceed');
-
-Route::controllers([
+/*Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
-]);
+]);*/

@@ -53,98 +53,78 @@ class ParserController extends Controller {
         $label['cat']['PrepaidCardsOperations'] = 'ЭДС, операции';
         $label['cat']['PrepaidCardsTransfers']  = 'ЭДС, переводы';
         $label['cat']['SavingAccountTransfers'] = 'накопительные счета';
-        $label['ope']['buy'] = 'Покупка';
-        $label['ope']['sell'] = 'Продажа';
+        $label['opr']['buy'] = 'Покупка';
+        $label['opr']['sell'] = 'Продажа';
+        $label['cur']['USDRUB'] = null;
+        $label['cur']['USDEUR'] = null;
+        $label['cur']['USDGBP'] = null;
+        $label['cur']['EURRUB'] = null;
+        $label['cur']['EURUSD'] = null;
+        $label['cur']['EURGBP'] = null;
+        $label['cur']['GBPRUB'] = null;
+        $label['cur']['GBPUSD'] = null;
+        $label['cur']['GBPEUR'] = null;
 
         $this->labels = $label;
-
-        $currencies = ['RUB', 'USD', 'EUR', 'GBP'];
-        $this->currencies = $currencies;
     }
 
-    public function proceed(Request $request)
+    public function proceed()
     {
 
-        $input = Request::all();
+        $data = [];
+        $categories = [];
+        $operations = [];
+        $from = [];
+        $to = [];
 
-        //var_dump( $request->cur );
-        if(!isset($input['cur']) ){
-            $name = Request::input('name', 'Sally');;
-        }
+        foreach( $this->labels as $type => $value ){
+            foreach( $value as $name => $lbl ){
+                $data[$type][$name] = Request::input("$type.$name", null);
 
-        //dd( Input::has('debit_card_transfer') );
+                if( $_SERVER['REQUEST_METHOD'] == 'GET' ){
+                    //Sell initial data if get request
+                    $data['cat']['DebitCardsTransfers'] = 1;
+                    $data['opr']['sell'] = 1;
+                    $data['cur']['USDRUB'] = 1;
+                }
 
-        foreach($this->currencies as $cur1){
-            foreach($this->currencies as $cur2){
-
+                if( $data[$type][$name] ){
+                    if($type == 'cat') $categories[] = $name;
+                    if($type == 'opr') $operations[] = $name;
+                    if($type == 'cur'){
+                        $from[] = substr($name,0,3);
+                        $to[]   = substr($name,3,3);
+                    }
+                }
             }
         }
 
-        //dd( $request->cur );
-        $updates = Update::all();//->take(15);
-        if( $_SERVER['REQUEST_METHOD'] == 'GET' ){
+/*        if( $_SERVER['REQUEST_METHOD'] == 'GET' ){
             //Sell initial data if get request
-            $request->debit_card_transfer = 1;
-            $request->sell = 1;
+            $data['cat']['DebitCardsTransfers'] = 1;
+            $data['opr']['sell'] = 1;
+            $data['cur']['USDRUB'] = 1;
+        }*/
 
-            //dd($request);
-            //dd($request->sell);
-            $request->cur = [];
-            $request->cur['USDRUB'] = 1;
-        }
-
+        $updates = Update::all();//->take(15);
         $dates=[];
         foreach( $updates->lists('created_at') as $up )
             $dates[] = $up->format('d.m.Y H:i');
-
-        //categories
-        $categories = [];
-        if( $request->credit_card_transfer )    $categories[] = 'CreditCardsTransfers';
-        if( $request->credit_card_operations)   $categories[] = 'CreditCardsOperations';
-        if( $request->debit_card_transfer)      $categories[] = 'DebitCardsTransfers';
-        if( $request->debit_card_operations)    $categories[] = 'DebitCardsOperations';
-        if( $request->deposit_payments )        $categories[] = 'DepositPayments';
-        if( $request->deposit_closing_benefit ) $categories[] = 'DepositClosingBenefit';
-        if( $request->deposit_closing )         $categories[] = 'DepositClosing';
-        if( $request->prepaid_card_transfer )   $categories[] = 'PrepaidCardsTransfers';
-        if( $request->prepaid_card_operations ) $categories[] = 'PrepaidCardsOperations';
-
-        //operations
-        $operations = [];
-        if( $request->buy )  $operations[] = 'buy';
-        if( $request->sell ) $operations[] = 'sell';
-
-        //currencies
-        $from = [];
-        $to = [];
-        if( isset( $request->cur ) ){
-            foreach( $request->cur as $key => $value )
-                if( in_array( substr($key,0,3), $this->currencies) &&  in_array(substr($key,3,3), $this->currencies ) ){
-                    $from[] = substr($key,0,3); $to[] = substr($key,3,3);
-                }
-        }
-
-
-/*        $exchanges = DB::table('exchanges')
-                       ->whereIn('category', $categories )
-                       ->whereIn('operation', $operations )
-                       ->whereIn('from', $from )
-                       ->whereIn('to', $to )
-                       ->get();*/
 
           $exchanges = DB::table('exchanges')
                                ->whereIn('category', $categories )
                                ->whereIn('operation', $operations )
                                ->where(function($q) use($from, $to){
-                                   // dd($from, $to);
-                                    foreach( $from as $key => $fr )
-                                        $q->where('from', '=', $from[$key])
-                                          ->where('to', '=', $to[$key]);
+                                        $wh = '';
+                                        foreach( $from as $key => $fr ){
+                                            $wh .= "`from`='{$from[$key]}' AND `to`='{$to[$key]}' OR ";
+                                        }
+                                        $wh .= '1=0';
+                                        $q->whereRaw($wh);
                                 })
                                ->get();
 
-
-        $rates = array();
+        $rates = [];
         foreach($exchanges as $rate){
             $rates[ $rate->category . '_'
                   . $rate->operation . '_'
@@ -154,35 +134,42 @@ class ParserController extends Controller {
         }
 
 
-        $data = array();
+        $js_data = [];
         foreach( $rates as $label => $r  ){
             $color = array_pop($this->colors);
-            $data[] = array( 'label' => $this->prepare_label($label)
-                           , 'data'=> $r
-                           , 'strokeColor' => '#' . $color['stroke']
-                           , 'pointColor' => '#' . $color['point'] );
+            $js_data[] = array( 'label' => $this->decorate_label($label)
+                              , 'data'=> $r
+                              , 'strokeColor' => '#' . $color['stroke']
+                              , 'pointColor'  => '#' . $color['point'] );
         }
 
+        return view('purechart')->with('updates', $this->decorate_dates($dates) )
+                                ->with('data', $js_data)
+                                ->with('input', $data )
+                                ->with('width', 23*count($dates));
+    }
+
+    protected function decorate_label( $label )
+    {
+        list($category, $operation, $from, $to) = explode('_', $label);
+        $operation = $this->labels['opr'][$operation];
+        $category = $this->labels['cat'][$category];
+
+        return "$operation $from за $to ($category)";
+    }
+
+    protected function decorate_dates( $dates )
+    {
         $saved = '';
         foreach ($dates as &$date) {
             $tmp = $date;
             if( strncmp($date, $saved, 10) === 0 )
-                $date = substr($date, 11);
+            $date = substr($date, 11);
             $saved = $tmp;
         }
 
-        return view('purechart')->with('updates', $dates)
-                            ->with('data', $data)
-                            ->with('request', $request)
-                            ->with('width', 23*count($dates));
+        return $dates;
     }
 
-    protected function prepare_label( $label )
-    {
-        list($category, $operation, $from, $to) = explode('_', $label);
-        $operation = $this->labels['ope'][$operation];
-        $category = $this->labels['cat'][$category];
-        return "$operation $from за $to ($category)";
 
-    }
 }
