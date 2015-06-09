@@ -95,8 +95,8 @@
     </div>
   </div><!-- /left settings column-->
 
-  <div class="pure-u-5-6 chart" ><!-- right chart column-->
-      <canvas id="report"  width="{{$width}}" height="500"></canvas>
+  <div class="pure-u-5-6" ><!-- right chart column-->
+      <div class="chart"><canvas id="report"  width="{{$width}}" height="500"></canvas></div>
   </div><!-- right chart column-->
 </div> <!-- /first row -->
 
@@ -143,7 +143,7 @@
         padding:.3em;
     }
     .chart{
-        max-width: 1200px;
+        /*max-width: 1000px;*/
         overflow-x:scroll;
         background-color: aliceblue;
         padding: 2em;
