@@ -1,9 +1,6 @@
 <?php namespace tinkoff\Http\Controllers;
 
-use tinkoff\Parser;
-use tinkoff\Exchange;
 use tinkoff\Update;
-//use Illuminate\Http\Request;
 use Request;
 use Illuminate\Support\Input;
 use DB;
@@ -12,7 +9,12 @@ class ParserController extends Controller {
 
     public $colors;
     public $labels;
-    public $currencies;
+    public $input = [];
+    public $categories = [];
+    public $operations = [];
+    public $from = [];
+    public $to = [];
+
 
     public function __construct()
     {
@@ -70,83 +72,11 @@ class ParserController extends Controller {
 
     public function proceed()
     {
+        $js_data = $this->get_data();
 
-        $data = [];
-        $categories = [];
-        $operations = [];
-        $from = [];
-        $to = [];
-
-        foreach( $this->labels as $type => $value ){
-            foreach( $value as $name => $lbl ){
-                $data[$type][$name] = Request::input("$type.$name", null);
-
-                if( $_SERVER['REQUEST_METHOD'] == 'GET' ){
-                    //Sell initial data if get request
-                    $data['cat']['DebitCardsTransfers'] = 1;
-                    $data['opr']['sell'] = 1;
-                    $data['cur']['USDRUB'] = 1;
-                }
-
-                if( $data[$type][$name] ){
-                    if($type == 'cat') $categories[] = $name;
-                    if($type == 'opr') $operations[] = $name;
-                    if($type == 'cur'){
-                        $from[] = substr($name,0,3);
-                        $to[]   = substr($name,3,3);
-                    }
-                }
-            }
-        }
-
-/*        if( $_SERVER['REQUEST_METHOD'] == 'GET' ){
-            //Sell initial data if get request
-            $data['cat']['DebitCardsTransfers'] = 1;
-            $data['opr']['sell'] = 1;
-            $data['cur']['USDRUB'] = 1;
-        }*/
-
-        $updates = Update::all();//->take(15);
-        $dates=[];
-        foreach( $updates->lists('created_at') as $up )
-            $dates[] = $up->format('d.m.Y H:i');
-
-          $exchanges = DB::table('exchanges')
-                               ->whereIn('category', $categories )
-                               ->whereIn('operation', $operations )
-                               ->where(function($q) use($from, $to){
-                                        $wh = '';
-                                        foreach( $from as $key => $fr ){
-                                            $wh .= "`from`='{$from[$key]}' AND `to`='{$to[$key]}' OR ";
-                                        }
-                                        $wh .= '1=0';
-                                        $q->whereRaw($wh);
-                                })
-                               ->get();
-
-        $rates = [];
-        foreach($exchanges as $rate){
-            $rates[ $rate->category . '_'
-                  . $rate->operation . '_'
-                  . $rate->from . '_'
-                  . $rate->to
-                  ][] = $rate->value;
-        }
-
-
-        $js_data = [];
-        foreach( $rates as $label => $r  ){
-            $color = array_pop($this->colors);
-            $js_data[] = array( 'label' => $this->decorate_label($label)
-                              , 'data'=> $r
-                              , 'strokeColor' => '#' . $color['stroke']
-                              , 'pointColor'  => '#' . $color['point'] );
-        }
-
-        return view('purechart')->with('updates', $this->decorate_dates($dates) )
-                                ->with('data', $js_data)
-                                ->with('input', $data )
-                                ->with('width', 23*count($dates));
+        return view('purechart')->with('data',    $js_data)
+                                ->with('input',   $this->input )
+                                ->with('width',   23*count($js_data['AxisLabels']));
     }
 
     protected function decorate_label( $label )
@@ -169,6 +99,79 @@ class ParserController extends Controller {
         }
 
         return $dates;
+    }
+
+    /**
+     * @return array
+     */
+    public function get_data()
+    {
+        $input  = [];
+        foreach ($this->labels as $type => $value) {
+            foreach ($value as $name => $lbl) {
+                $input[$type][$name] = Request::input("$type.$name", null);
+
+/*                if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+                    //Sell initial data if get request
+                    $input['cat']['DebitCardsTransfers'] = 1;
+                    $input['opr']['sell'] = 1;
+                    $input['cur']['USDRUB'] = 1;
+                }*/
+
+                if ($input[$type][$name]) {
+                    if ($type == 'cat') $this->categories[] = $name;
+                    if ($type == 'opr') $this->operations[] = $name;
+                    if ($type == 'cur') {
+                        $this->from[] = substr($name, 0, 3);
+                        $this->to[] = substr($name, 3, 3);
+                    }
+                }
+            }
+        }
+
+        $updates = Update::all(); //->take(15);
+        $dates = [];
+        foreach ($updates->lists('created_at') as $up)
+            $dates[] = $up->format('d.m.Y H:i');
+
+        $from = $this->from;
+        $to = $this->to;
+        $exchanges = DB::table('exchanges')
+            ->whereIn('category', $this->categories)
+            ->whereIn('operation', $this->operations)
+            ->where(function ($q) use ($from, $to) {
+                $wh = '';
+                foreach ($from as $key => $fr) {
+                    $wh .= "`from`='{$from[$key]}' AND `to`='{$to[$key]}' OR ";
+                }
+                $wh .= '1=0';
+                $q->whereRaw($wh);
+            })
+            ->get();
+
+        $rates = [];
+        foreach ($exchanges as $rate) {
+            $rates[$rate->category . '_'
+            . $rate->operation . '_'
+            . $rate->from . '_'
+            . $rate->to][] = $rate->value;
+        }
+
+
+        $data = [];
+        foreach ($rates as $label => $r) {
+            $color = array_pop($this->colors);
+            $data[] = array('label' => $this->decorate_label($label)
+            , 'data' => $r
+            , 'strokeColor' => '#' . $color['stroke']
+            , 'pointColor' => '#' . $color['point']);
+        }
+        $json_data['DataSets'] = $data;
+        $json_data['AxisLabels'] = $this->decorate_dates($dates);
+
+        $this->input = $input;
+
+        return $json_data;
     }
 
 

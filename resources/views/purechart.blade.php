@@ -3,7 +3,7 @@
 
 <div class="pure-g"><!-- first-row -->
   <div class="pure-u-1-6"><!-- left settings column-->
-  {!! Form::open() !!}
+  {!! Form::open( array('id' => 'checkboxes') ) !!}
     <!-- /CATEGORIES-->
     <div class="settings">
     <div class="stn" id="cts">
@@ -14,24 +14,24 @@
       </div><!-- /first-settings-row -->
       <div class="pure-g stnr"><!-- second-settings-row credit card #ffdd2e -->
         <div class="pure-u-3-5">Кредитная карта</div>
-        <div class="pure-u-1-5">{!! Form::checkbox('cat[CreditCardsTransfers]', 1, $input['cat']['CreditCardsTransfers'], ['class' => '', 'title' => 'Кредитная карта, пополнение']) !!}</div>
-        <div class="pure-u-1-5">{!! Form::checkbox('cat[CreditCardsOperations]', 1, $input['cat']['CreditCardsOperations'], ['class' => '', 'title' => 'Кредитная карта, операции']) !!}</div>
+        <div class="pure-u-1-5">{!! Form::checkbox('cat[CreditCardsTransfers]', 1, $input['cat']['CreditCardsTransfers'], ['class' => 'cb', 'title' => 'Кредитная карта, пополнение']) !!}</div>
+        <div class="pure-u-1-5">{!! Form::checkbox('cat[CreditCardsOperations]', 1, $input['cat']['CreditCardsOperations'], ['class' => 'cb', 'title' => 'Кредитная карта, операции']) !!}</div>
       </div>
       <div class="pure-g stnr"><!-- third-settings-row debit card #ffdd2e -->
         <div class="pure-u-3-5">Дебетовая карта</div>
-        <div class="pure-u-1-5">{!! Form::checkbox('cat[DebitCardsTransfers]', 1, $input['cat']['DebitCardsTransfers'], ['class' => '', 'title' => 'Дебетовая карта, пополнение']) !!}</div>
-        <div class="pure-u-1-5">{!! Form::checkbox('cat[DebitCardsOperations]', 1, $input['cat']['DebitCardsOperations'], ['class' => '', 'title' => 'Дебетовая карта, операции']) !!}</div>
+        <div class="pure-u-1-5">{!! Form::checkbox('cat[DebitCardsTransfers]', 1, $input['cat']['DebitCardsTransfers'], ['title' => 'Дебетовая карта, пополнение']) !!}</div>
+        <div class="pure-u-1-5">{!! Form::checkbox('cat[DebitCardsOperations]', 1, $input['cat']['DebitCardsOperations'], ['title' => 'Дебетовая карта, операции']) !!}</div>
       </div>
       <div class="pure-g stnr"><!-- fourth-settings-row deposit #ffdd2e -->
         <div class="pure-u-3-5">Вклад</div>
-        <div class="pure-u-1-5">{!! Form::checkbox('cat[DepositPayments]', 1, $input['cat']['DepositPayments'], ['class' => '', 'title' => 'Вклад, пополнение']) !!}</div>
-        <div class="pure-u-1-5">{!! Form::checkbox('cat[DepositClosingBenefit]', 1, $input['cat']['DepositClosingBenefit'], ['class' => '', 'title' => 'Вклад, закрытие']) !!}
-                                {!! Form::checkbox('cat[DepositClosing]', 1, $input['cat']['DepositClosing'], ['class' => '', 'title' => 'Вклад, досрочное изъятие']) !!}</div>
+        <div class="pure-u-1-5">{!! Form::checkbox('cat[DepositPayments]', 1, $input['cat']['DepositPayments'], ['title' => 'Вклад, пополнение']) !!}</div>
+        <div class="pure-u-1-5">{!! Form::checkbox('cat[DepositClosingBenefit]', 1, $input['cat']['DepositClosingBenefit'], ['title' => 'Вклад, закрытие']) !!}
+                                {!! Form::checkbox('cat[DepositClosing]', 1, $input['cat']['DepositClosing'], ['title' => 'Вклад, досрочное изъятие']) !!}</div>
       </div>
       <div class="pure-g stnr"><!-- fourth-settings-row deposit #ffdd2e -->
         <div class="pure-u-3-5">Электронные ДС</div>
-        <div class="pure-u-1-5">{!! Form::checkbox('cat[PrepaidCardsTransfers]', 1, $input['cat']['PrepaidCardsTransfers'], ['class' => '', 'title' => 'Электронные ДС, пополнение']) !!}</div>
-        <div class="pure-u-1-5">{!! Form::checkbox('cat[PrepaidCardsOperations]', 1, $input['cat']['PrepaidCardsOperations'], ['class' => '', 'title' => 'Электронные ДС, операции']) !!}</div>
+        <div class="pure-u-1-5">{!! Form::checkbox('cat[PrepaidCardsTransfers]', 1, $input['cat']['PrepaidCardsTransfers'], ['title' => 'Электронные ДС, пополнение']) !!}</div>
+        <div class="pure-u-1-5">{!! Form::checkbox('cat[PrepaidCardsOperations]', 1, $input['cat']['PrepaidCardsOperations'], ['title' => 'Электронные ДС, операции']) !!}</div>
       </div>
     </div>
     <!-- /CATEGORIES-->
@@ -87,12 +87,7 @@
     </div>
     </div>
     <!-- /CURRENCIES -->
-    <div class="pure-g stnr">
-      <div class="pure-u-1">
-        {!! Form::submit('Применить', ['class' => 'pure-button pure-button-primary'] ) !!}
-        {!! Form::close() !!}
-      </div>
-    </div>
+  {!! Form::close() !!}
   </div><!-- /left settings column-->
 
   <div class="pure-u-5-6" ><!-- right chart column-->
@@ -104,10 +99,7 @@
 <div class="pure-g"> <!-- second row -->
   <div class="pure-u-1-6"></div>
   <div class="pure-u-5-6">
-    <table class="tab">
-    @foreach($data as $da)
-      <tr><td class="tab"><div class="circle" style="background: {{ $da['pointColor']}}"></div></td><td>{{ $da['label'] }}</td></tr>
-    @endforeach
+    <table class="tab" id="legend">
     </table>
   </div>
 </div> <!-- /second row -->
@@ -116,19 +108,70 @@
 @section('footer')
 <script src="/js/chart.min.js"></script>
 <script>
-    (function(){
-        var ctx = document.getElementById('report').getContext('2d');
-        var chart = {
-            labels: {!! json_encode($updates) !!},
-            datasets: {!! json_encode($data) !!}
-        };
+    $(document).ready(function(){
+        //Set initial checkboxes
+        $('[name="cat[DebitCardsTransfers]"]').prop('checked', true);
+        $('[name="opr[sell]"]').prop('checked', true);
+        $('[name="cur[USDRUB]"]').prop('checked', true);
 
-        new Chart(ctx).Line(chart, { bezierCurve:false,
-                                     datasetFill : false,
-                                     pointHitDetectionRadius : 3,
-                                     multiTooltipTemplate: "<%= datasetLabel %> - <%= value %>"
-                                   });
-    })();
+        $(':checkbox').click(function(){
+            GetChartData();
+        });
+        GetChartData();
+    });
+
+    function WriteLegend( data ){
+        $('#legend').empty();
+        $.each(data, function( key, value){
+            var str = '<tr><td class="tab"><div class="circle" style="background:' + value.pointColor + '"></div></td><td>' +  value.label + '</td></tr>';
+            $('#legend').append(str);
+        });
+
+
+    }
+
+    function GetChartData(){
+        $.ajax({
+            url: '/json',
+            method: 'GET',
+            data: $('#checkboxes').serialize(),
+            dataType: 'json',
+            success: function (d) {
+                chartData = {
+                    labels: d.AxisLabels,
+                    datasets: d.DataSets
+                };
+
+                prepareCanvas(chartData);
+                WriteLegend(chartData.datasets);
+            }
+        });
+    }
+
+    function prepareCanvas(chartData){
+
+//        console.log( 'chartdata=<' + chartData.datasets + '>' );
+//        console.log( chartData.datasets.length );
+//        console.log( chartData );
+
+        if( !chartData.datasets.length ){
+            lineChart.destroy();
+            return false;
+        }
+
+        if (typeof lineChart != "undefined") {
+            lineChart.destroy();
+        }
+
+        var ctx = document.getElementById('report').getContext('2d');
+        lineChart = new Chart(ctx).Line(chartData, { bezierCurve: false,
+            datasetFill : false,
+            pointHitDetectionRadius : 3,
+            //animation: false,
+            multiTooltipTemplate: "<%= datasetLabel %> - <%= value %>"
+        });
+    }
+
 </script>
 <style>
     #cts {background-color: #ffdd2e}
