@@ -126,8 +126,6 @@
             var str = '<tr><td class="tab"><div class="circle" style="background:' + value.pointColor + '"></div></td><td>' +  value.label + '</td></tr>';
             $('#legend').append(str);
         });
-
-
     }
 
     function GetChartData(){

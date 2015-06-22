@@ -166,6 +166,7 @@ class ParserController extends Controller {
             , 'strokeColor' => '#' . $color['stroke']
             , 'pointColor' => '#' . $color['point']);
         }
+        usort($data, function($a, $b){ return $b['data'][0] - $a['data'][0]; }  );
         $json_data['DataSets'] = $data;
         $json_data['AxisLabels'] = $this->decorate_dates($dates);
 

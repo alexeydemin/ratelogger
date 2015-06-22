@@ -38,7 +38,7 @@ Route::post('about', 'AboutController@keep');
 Route::get('home', 'HomeController@index');*/
 
 Route::get('/', 'ParserController@proceed');
-Route::post('/', 'ParserController@proceed');
+//Route::post('/', 'ParserController@proceed');
 Route::get('/json', 'ParserController@get_data');
 //Route::post('/json', 'ParserController@get_data');
 
