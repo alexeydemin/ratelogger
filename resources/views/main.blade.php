@@ -8,7 +8,7 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 </head>
 <body>
-<div>
+<div id="ratelogger">
     @yield('content')
 </div>
     @yield('footer')

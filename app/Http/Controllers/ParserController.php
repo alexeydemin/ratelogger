@@ -111,13 +111,6 @@ class ParserController extends Controller {
             foreach ($value as $name => $lbl) {
                 $input[$type][$name] = Request::input("$type.$name", null);
 
-/*                if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-                    //Sell initial data if get request
-                    $input['cat']['DebitCardsTransfers'] = 1;
-                    $input['opr']['sell'] = 1;
-                    $input['cur']['USDRUB'] = 1;
-                }*/
-
                 if ($input[$type][$name]) {
                     if ($type == 'cat') $this->categories[] = $name;
                     if ($type == 'opr') $this->operations[] = $name;
@@ -129,7 +122,7 @@ class ParserController extends Controller {
             }
         }
 
-        $updates = Update::all(); //->take(15);
+        $updates = Update::all();
         $dates = [];
         foreach ($updates->lists('created_at') as $up)
             $dates[] = $up->format('d.m.Y H:i');

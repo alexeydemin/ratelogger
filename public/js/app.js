@@ -1,46 +1,24 @@
-$(document).ready(function(){
-    //Set initial checkboxes
-    $('[name="cat[DebitCardsTransfers]"]').prop('checked', true);
-    $('[name="opr[sell]"]').prop('checked', true);
-    $('[name="cur[USDRUB]"]').prop('checked', true);
+new Vue({
+    el: '#ratelogger',
 
-    $(':checkbox').click(function(){
-        GetChartData();
-    });
-    GetChartData();
+    data: {
+        debitcardstransfers: true,
+        sell: true,
+        usdrub: true
+    },
+
+    ready: function() {
+        postRequest();
+    },
+
+    methods: {
+        onClick: function (e) {
+            postRequest();
+        }
+    }
 });
 
-function WriteLegend( data ){
-    $('#legend').empty();
-    $.each(data, function( key, value){
-        var str = '<tr><td class="tab"><div class="circle" style="background:' + value.pointColor + '"></div></td><td>' +  value.label + '</td></tr>';
-        $('#legend').append(str);
-    });
-}
-
-function GetChartData(){
-    $.ajax({
-        url: '/json',
-        method: 'GET',
-        data: $('#checkboxes').serialize(),
-        dataType: 'json',
-        success: function (d) {
-            chartData = {
-                labels: d.AxisLabels,
-                datasets: d.DataSets
-            };
-
-            prepareCanvas(chartData);
-            WriteLegend(chartData.datasets);
-        }
-    });
-}
-
 function prepareCanvas(chartData){
-
-//        console.log( 'chartdata=<' + chartData.datasets + '>' );
-//        console.log( chartData.datasets.length );
-//        console.log( chartData );
 
     if( !chartData.datasets.length ){
         lineChart.destroy();
@@ -57,5 +35,31 @@ function prepareCanvas(chartData){
         pointHitDetectionRadius : 3,
         //animation: false,
         multiTooltipTemplate: "<%= datasetLabel %> - <%= value %>"
+    });
+}
+
+function WriteLegend( data ){
+    $('#legend').empty();
+    $.each(data, function( key, value){
+        var str = '<tr><td class="tab"><div class="circle" style="background:' + value.pointColor + '"></div></td><td>' +  value.label + '</td></tr>';
+        $('#legend').append(str);
+    });
+}
+
+function postRequest(){
+    $.ajax({
+        url: '/json',
+        method: 'GET',
+        data: $('#checkboxes').serialize(),
+        dataType: 'json',
+        success: function (d) {
+            chartData = {
+                labels: d.AxisLabels,
+                datasets: d.DataSets
+            };
+
+            prepareCanvas(chartData);
+            WriteLegend(chartData.datasets);
+        }
     });
 }
