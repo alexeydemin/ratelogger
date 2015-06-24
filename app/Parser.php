@@ -1,6 +1,5 @@
 <?php namespace tinkoff;
 
-//use Goutte\Client;
 use Curl\Curl;
 use Illuminate\Database\Eloquent\Model;
 
