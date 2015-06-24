@@ -9,27 +9,27 @@
     <div class="stn" id="cts">
       <div class="pure-g stnr">
         <div class="pure-u-3-5"></div>
-        <div class="pure-u-1-5"><span title="Пополнение">+</span></div>
-        <div class="pure-u-1-5"><span title="Операции">-</span></div>
+        <div class="pure-u-1-5"><span title="{{ trans('messages.refill') }}">+</span></div>
+        <div class="pure-u-1-5"><span title="{{ trans('messages.transactions') }}">-</span></div>
       </div>
       <div class="pure-g stnr">
-        <div class="pure-u-3-5">Кредитная карта</div>
-        <div class="pure-u-1-5">{!! Form::checkbox('cat[CreditCardsTransfers]', 1, $input['cat']['CreditCardsTransfers'], ['title' => 'Кредитная карта, пополнение']) !!}</div>
-        <div class="pure-u-1-5">{!! Form::checkbox('cat[CreditCardsOperations]', 1, $input['cat']['CreditCardsOperations'], ['title' => 'Кредитная карта, операции']) !!}</div>
+        <div class="pure-u-3-5">{{ trans('messages.credit_card') }}</div>
+        <div class="pure-u-1-5">{!! Form::checkbox('cat[CreditCardsTransfers]', 1, $input['cat']['CreditCardsTransfers'], ['title' => trans('messages.credit_card_refill') ]) !!}</div>
+        <div class="pure-u-1-5">{!! Form::checkbox('cat[CreditCardsOperations]', 1, $input['cat']['CreditCardsOperations'], ['title' => trans('messages.credit_card_transactions') ]) !!}</div>
       </div>
       <div class="pure-g stnr">
-        <div class="pure-u-3-5">Дебетовая карта</div>
+        <div class="pure-u-3-5">{{ trans('messages.debit_card') }}</div>
         <div class="pure-u-1-5">{!! Form::checkbox('cat[DebitCardsTransfers]', 1, $input['cat']['DebitCardsTransfers'], ['v-model' => 'debitcardstransfers', 'title' => 'Дебетовая карта, пополнение']) !!}</div>
         <div class="pure-u-1-5">{!! Form::checkbox('cat[DebitCardsOperations]', 1, $input['cat']['DebitCardsOperations'], ['title' => 'Дебетовая карта, операции']) !!}</div>
       </div>
       <div class="pure-g stnr">
-        <div class="pure-u-3-5">Вклад</div>
+        <div class="pure-u-3-5">{{ trans('messages.deposit') }}</div>
         <div class="pure-u-1-5">{!! Form::checkbox('cat[DepositPayments]', 1, $input['cat']['DepositPayments'], ['title' => 'Вклад, пополнение']) !!}</div>
         <div class="pure-u-1-5">{!! Form::checkbox('cat[DepositClosingBenefit]', 1, $input['cat']['DepositClosingBenefit'], ['title' => 'Вклад, закрытие']) !!}
                                 {!! Form::checkbox('cat[DepositClosing]', 1, $input['cat']['DepositClosing'], ['title' => 'Вклад, досрочное изъятие']) !!}</div>
       </div>
       <div class="pure-g stnr">
-        <div class="pure-u-3-5">Электронные ДС</div>
+        <div class="pure-u-3-5">{{ trans('messages.e_money') }}</div>
         <div class="pure-u-1-5">{!! Form::checkbox('cat[PrepaidCardsTransfers]', 1, $input['cat']['PrepaidCardsTransfers'], ['title' => 'Электронные ДС, пополнение']) !!}</div>
         <div class="pure-u-1-5">{!! Form::checkbox('cat[PrepaidCardsOperations]', 1, $input['cat']['PrepaidCardsOperations'], ['title' => 'Электронные ДС, операции']) !!}</div>
       </div>
@@ -38,8 +38,8 @@
     <!-- OPERATIONS -->
     <div class="stn" id="ops">
       <div class="pure-g stnr">
-        <div class="pure-u-1-2">Покупка</div>
-        <div class="pure-u-1-2">Продажа</div>
+        <div class="pure-u-1-2">{{ trans('messages.buy') }}</div>
+        <div class="pure-u-1-2">{{ trans('messages.sell') }}</div>
       </div>
       <div class="pure-g stnr">
         <div class="pure-u-1-2">{!! Form::checkbox('opr[buy]', 1, $input['opr']['buy'], ['title' => 'Покупка банком']) !!}</div>
